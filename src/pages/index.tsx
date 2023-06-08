@@ -1,117 +1,102 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import type { NextPage } from "next";
-import { PublicKey } from "@solana/web3.js";
+import { useAnchorWallet, useWallet } from "@solana/wallet-adapter-react";
+
+import { TREASURY_ACCOUNTS, connection, program } from "../../program/constant";
 import {
-  WalletModalProvider,
-  WalletMultiButton,
-} from "@solana/wallet-adapter-react-ui";
-import { useConnection, useWallet } from "@solana/wallet-adapter-react";
-import { getParsedNftAccountsByOwner } from "@nfteyez/sol-rayz";
-import { CREATOR_ADDRESS } from "../config";
+  createClaimTx,
+  createOpenBoxTx,
+  getUserState,
+} from "../../program/scripts";
+import { AnchorProvider } from "@project-serum/anchor";
+import { BarLoader } from "react-spinners";
+import { successAlert, errorAlert } from "../components/ToastGroup";
 
-import Button from "../components/Button";
-import NFTCard from "../components/NFTCard";
-import { web3 } from '@project-serum/anchor';
-
-
-
-export interface NFTType {
-  imgUrl: string;
-  tokenId: string;
-  description: string;
-}
+import { BalanceContext } from "../../context/BalanceContext";
 
 const Home: NextPage = () => {
   const wallet = useWallet();
-  const [nftList, setNftList] = useState<NFTType[]>([]);
-  const [myBalance, setMyBalance] = useState<Number>(0);
-  const [selectState, setSlectState] = useState<boolean>(false);
+  const anchorWallet = useAnchorWallet();
+  const [myClaimable, setMyClaimable] = useState<number>(0);
+  const [loading, setLoading] = useState(false);
+  const { balance, setBalance } = useContext(BalanceContext);
 
   useEffect(() => {
-    getAllNfts();
+    getClaimable();
     // eslint-disable-next-line
   }, [wallet.publicKey, wallet.connected]);
 
-  const selectAll = () => {
-
-  }
-
-
-  const getAllNfts = async () => {
-    const solConnection = new web3.Connection(web3.clusterApiUrl("devnet"));
+  const getClaimable = async () => {
     if (wallet?.publicKey) {
-      let balance = await solConnection.getBalance(wallet.publicKey)
-      setMyBalance(balance)
-    }
-
-    if (wallet.publicKey === null) return;
-    try {
-      const nftList = await getParsedNftAccountsByOwner({
-        publicAddress: wallet.publicKey.toBase58(),
-        connection: solConnection,
-      });
-
-      let list: NFTType[] = [];
-      if (nftList.length > 0) {
-        for (let item of nftList) {
-          if (item.data?.creators)
-            if (item.data?.creators[0].address === CREATOR_ADDRESS) {
-
-              try {
-                const response = await fetch(item?.data.uri, {
-                  method: "GET",
-                });
-                const responsedata = await response.json();
-                console.log(responsedata)
-                list.push({
-                  imgUrl: responsedata.image,
-                  tokenId: item?.data.name,
-                  description: responsedata.description
-
-                });
-
-              } catch (error) {
-                console.error("Unable to fetch data:", error);
-              }
-            }
-        }
-      }
-
-      console.log("nftList =>", list)
-      setNftList(list);
-    } catch (error) {
-      console.log(error);
+      let value = await getUserState(wallet.publicKey, program, connection);
+      setMyClaimable(value);
     }
   };
 
-  const selectAllNFT = () => {
-    setSlectState(true)
-  }
-  const clearSelectNFT = () => {
-    setSlectState(false)
-  }
-  const sendNFT = () => {
-    setSlectState(false)
-  }
+  const getBalance = async () => {
+    if (wallet?.publicKey) {
+      let value = await connection.getBalance(wallet.publicKey);
+      setBalance(value);
+    } else {
+      setBalance(0);
+    }
+  };
+
+  const openBox = async () => {
+    if (anchorWallet?.publicKey) {
+      setLoading(true);
+
+      try {
+        const tx =
+          myClaimable > 0
+            ? await createClaimTx(anchorWallet, program)
+            : await createOpenBoxTx(anchorWallet, TREASURY_ACCOUNTS, program);
+
+        const provider = new AnchorProvider(connection, anchorWallet, {});
+        const txId = await provider.sendAndConfirm(tx, [], {
+          commitment: "confirmed",
+        });
+
+        console.log("txHash: ", txId);
+
+        getClaimable();
+        getBalance();
+        successAlert("Transaction completed");
+        setLoading(false);
+      } catch (e) {
+        console.log(e);
+        errorAlert("Failed to click button");
+      }
+    }
+  };
 
   return (
     <main className="w-full">
       <div className="lg:container mx-auto">
-        <div className="w-full justify-start flex gap-[20px] mt-[17px]">
-          <h1 className="font-bold text-lg text-white">Total NFT : {nftList.length}</h1>
-          <h1 className="font-bold text-lg text-white">Balance: {myBalance}</h1>
+        <div className="w-full text-center gap-[20px] mt-[17px]">
+          <h1 className="font-bold text-3xl text-gray">
+            {myClaimable > 0
+              ? `You earned ${myClaimable.toFixed(3)} SOL`
+              : "This button does something sometimes."}
+          </h1>
 
-          <Button bgColor="0797FF" btnText="select all" onclickfunction={selectAllNFT} />
-          <Button bgColor="0797FF" btnText="clear" onclickfunction={clearSelectNFT} />
-          <Button bgColor="92FF07" btnText="send" onclickfunction={sendNFT} />
-
-        </div>
-        <div className="w-full grid grid-cols-4 mt-[27px] gap-[25px]">
-          {nftList.length > 0 && nftList.map((data, key) => (
-            < NFTCard imgUrl={data.imgUrl} tokenId={data.tokenId} description={data.description} key={key} checkAll={selectState} />
-          ))}
+          <button
+            className="text-white text-3xl rounded-xl mt-10 px-10 py-5 bg-blue-500 hover:bg-blue-600 transition-all
+          duration-300"
+            onClick={openBox}
+          >
+            {myClaimable > 0 ? "Claim" : "Click Me"}
+          </button>
         </div>
       </div>
+      {loading && (
+        <div
+          className="absolute top-0 left-0 right-0 bottom-0 items-center justify-center bg-black flex
+      bg-opacity-10 backdrop-blur-md"
+        >
+          <BarLoader color="black" />
+        </div>
+      )}
     </main>
   );
 };
