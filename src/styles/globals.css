@@ -82,15 +82,16 @@ body {
 }
 body {
   color: rgb(var(--foreground-rgb));
-  background: #170047;
+  background: #eeeee0;
 }
 
 a {
     color: inherit;
   text-decoration: none;
 }
-    @media (prefers-color-scheme: dark) {
-    html {
-        color-scheme: dark;
-    }
-    }
+
+@media (prefers-color-scheme: dark) {
+  html {
+      color-scheme: dark;
+  }
+}
