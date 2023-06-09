@@ -10,7 +10,7 @@ import {
 } from "../../program/scripts";
 import { AnchorProvider } from "@project-serum/anchor";
 import { BarLoader } from "react-spinners";
-import { successAlert, errorAlert } from "../components/ToastGroup";
+import { successAlert, errorAlert, infoAlert } from "../components/ToastGroup";
 
 import { BalanceContext } from "../../context/BalanceContext";
 
@@ -61,12 +61,14 @@ const Home: NextPage = () => {
 
         getClaimable();
         getBalance();
-        successAlert("Transaction completed");
+        successAlert("Transaction completed.");
         setLoading(false);
       } catch (e) {
         console.log(e);
-        errorAlert("Failed to click button");
+        errorAlert("Failed to click button.");
       }
+    } else {
+      infoAlert("Please connect your wallet.");
     }
   };
 
