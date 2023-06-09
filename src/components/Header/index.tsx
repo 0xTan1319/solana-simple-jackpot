@@ -6,6 +6,7 @@ import {
 import { useContext, useEffect, useState } from "react";
 import { connection } from "../../../program/constant";
 import { BalanceContext } from "../../../context/BalanceContext";
+import Head from "next/head";
 
 export default function Header() {
   const wallet = useWallet();
@@ -28,6 +29,9 @@ export default function Header() {
 
   return (
     <div className="w-full flex justify-between p-[18px] border-b-[1px] border-[#d9d9d9]">
+      <Head>
+        <link rel="icon" href="../img/money.png" />
+      </Head>
       <div className="font-extrabold text-[28px] text-[#C4ACFF] uppercase">
         {/* <h1>Click button</h1> */}
       </div>

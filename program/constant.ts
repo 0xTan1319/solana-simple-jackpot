@@ -2,7 +2,6 @@ import {
     PublicKey, 
 } from "@solana/web3.js";
 import * as anchor from "@project-serum/anchor";
-import { IDL } from "./idl";
 
 const PROGRAM_ID = new PublicKey(
     "2LcmngU55MzrMPtScPtAx6NHpTfJdiHyqza8RtJbLd1i"
@@ -19,24 +18,10 @@ const TREASURY_ACCOUNTS = [
     new PublicKey("kVGZXZHFsZKRmR9DPQHaVQppvuD3LB4H8QzHxsrquTG")
 ];
 
-let wallet;
-let program: any;
 const connection = new anchor.web3.Connection(
   anchor.web3.clusterApiUrl("devnet"),
   "confirmed"
 );
-
-if (typeof window !== "undefined") {
-  let cloneWindow: any = window;
-  wallet = cloneWindow;
-  const providerInit = new anchor.AnchorProvider(
-    connection,
-    wallet["solana"],
-    anchor.AnchorProvider.defaultOptions()
-  );
-
-  program = new anchor.Program(IDL as anchor.Idl, PROGRAM_ID, providerInit);
-}
 
 export {
     LAMPORTS,
@@ -48,6 +33,5 @@ export {
     TREASURY_ACCOUNTS,
 
     PROGRAM_ID,
-    program,
     connection
 }
