@@ -28,7 +28,10 @@ export default function Header() {
   };
 
   return (
-    <div className="w-full flex justify-between p-[18px] border-b-[1px] border-[#d9d9d9]">
+    <div
+      className="w-full flex justify-between p-[18px] border-b-[1px] border-[#d9d9d9] z-50 fixed
+    bg-white backdrop-blur-md"
+    >
       <Head>
         <link rel="icon" href="../img/money.png" />
       </Head>

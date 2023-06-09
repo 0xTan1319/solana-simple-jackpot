@@ -101,10 +101,10 @@ const Home: NextPage = () => {
   };
 
   return (
-    <main className="w-full">
+    <main className="w-full z-40">
       <div className="lg:container mx-auto">
         <div className="w-full text-center gap-[20px] mt-[17px]">
-          <div className="flex items-center justify-center flex-col absolute top-0 left-0 right-0 bottom-20 space-y-6">
+          <div className="z-40 flex items-center justify-center flex-col absolute top-0 left-0 right-0 bottom-20 space-y-6">
             <h1 className="font-bold text-3xl text-gray">
               {myClaimable > 0
                 ? `You earned ${myClaimable.toFixed(3)} SOL`
@@ -123,7 +123,7 @@ const Home: NextPage = () => {
       {loading && (
         <div
           className="absolute top-0 left-0 right-0 bottom-0 items-center justify-center bg-black flex
-      bg-opacity-10 backdrop-blur-md"
+      bg-opacity-10 backdrop-blur-md z-[51]"
         >
           <BarLoader color="black" />
         </div>
