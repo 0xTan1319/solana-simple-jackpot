@@ -111,8 +111,8 @@ const Home: NextPage = () => {
           </h1>
 
           <button
-            className="text-white text-3xl rounded-xl mt-10 px-10 py-5 bg-blue-500 hover:bg-blue-600 transition-all
-          duration-300"
+            className="text-black text-3xl rounded-md mt-10 px-10 py-5 bg-white transition-all
+          duration-300 border border-black hover:bg-gray-900 hover:text-white"
             onClick={openBox}
           >
             {myClaimable > 0 ? "Claim" : "Click Me"}

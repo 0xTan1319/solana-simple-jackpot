@@ -39,9 +39,9 @@ export default function Header() {
         <h1 className="font-bold text-gray">
           Balance: {(balance.valueOf() / 1000000000).toFixed(3)} SOL
         </h1>
-        <div className="bg-blue-500 rounded-xl wallet">
+        <div className="bg-white wallet rounded-md border border-black">
           <WalletModalProvider>
-            <WalletMultiButton />
+            <WalletMultiButton className="text-black" />
           </WalletModalProvider>
         </div>
       </div>
