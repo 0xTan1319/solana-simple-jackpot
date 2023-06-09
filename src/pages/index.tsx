@@ -1,8 +1,15 @@
-import { useState, useEffect, useContext } from "react";
+import { useState, useEffect, useContext, useMemo } from "react";
 import type { NextPage } from "next";
 import { useAnchorWallet, useWallet } from "@solana/wallet-adapter-react";
 
-import { TREASURY_ACCOUNTS, connection, program } from "../../program/constant";
+import * as anchor from "@project-serum/anchor";
+import { IDL } from "../../program/idl";
+
+import {
+  PROGRAM_ID,
+  TREASURY_ACCOUNTS,
+  connection,
+} from "../../program/constant";
 import {
   createClaimTx,
   createOpenBoxTx,
@@ -20,6 +27,25 @@ const Home: NextPage = () => {
   const [myClaimable, setMyClaimable] = useState<number>(0);
   const [loading, setLoading] = useState(false);
   const { balance, setBalance } = useContext(BalanceContext);
+  const [provider, setProvider] = useState<AnchorProvider>();
+  const [program, setProgram] = useState<anchor.Program>();
+
+  useEffect(() => {
+    if (anchorWallet) {
+      const provider = new AnchorProvider(
+        connection,
+        anchorWallet,
+        anchor.AnchorProvider.defaultOptions()
+      );
+      setProvider(provider);
+      const program = new anchor.Program(
+        IDL as anchor.Idl,
+        PROGRAM_ID,
+        provider
+      );
+      setProgram(program);
+    }
+  }, [wallet.publicKey, wallet.connected]);
 
   useEffect(() => {
     getClaimable();
@@ -27,7 +53,7 @@ const Home: NextPage = () => {
   }, [wallet.publicKey, wallet.connected]);
 
   const getClaimable = async () => {
-    if (wallet?.publicKey) {
+    if (wallet?.publicKey && program) {
       let value = await getUserState(wallet.publicKey, program, connection);
       setMyClaimable(value);
     }
@@ -43,7 +69,7 @@ const Home: NextPage = () => {
   };
 
   const openBox = async () => {
-    if (anchorWallet?.publicKey) {
+    if (anchorWallet?.publicKey && provider && program) {
       setLoading(true);
 
       try {
@@ -52,7 +78,6 @@ const Home: NextPage = () => {
             ? await createClaimTx(anchorWallet, program)
             : await createOpenBoxTx(anchorWallet, TREASURY_ACCOUNTS, program);
 
-        const provider = new AnchorProvider(connection, anchorWallet, {});
         const txId = await provider.sendAndConfirm(tx, [], {
           commitment: "confirmed",
         });
@@ -62,7 +87,6 @@ const Home: NextPage = () => {
         getClaimable();
         getBalance();
         successAlert("Transaction completed.");
-        setLoading(false);
       } catch (e) {
         console.log(e);
         errorAlert("Failed to click button.");
@@ -70,6 +94,7 @@ const Home: NextPage = () => {
     } else {
       infoAlert("Please connect your wallet.");
     }
+    setLoading(false);
   };
 
   return (
