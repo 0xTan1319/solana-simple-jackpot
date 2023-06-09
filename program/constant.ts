@@ -2,6 +2,7 @@ import {
     PublicKey, 
 } from "@solana/web3.js";
 import * as anchor from "@project-serum/anchor";
+import { web3 } from "@project-serum/anchor";
 
 const PROGRAM_ID = new PublicKey(
     "2LcmngU55MzrMPtScPtAx6NHpTfJdiHyqza8RtJbLd1i"
@@ -18,10 +19,9 @@ const TREASURY_ACCOUNTS = [
     new PublicKey("kVGZXZHFsZKRmR9DPQHaVQppvuD3LB4H8QzHxsrquTG")
 ];
 
-const connection = new anchor.web3.Connection(
-  anchor.web3.clusterApiUrl("mainnet-beta"),
-  "confirmed"
-);
+const connection = new web3.Connection(
+  "https://api.mainnet-beta.solana.com/",
+  );
 
 export {
     LAMPORTS,
