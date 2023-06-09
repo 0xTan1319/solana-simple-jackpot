@@ -74,6 +74,10 @@ export type Solbox = {
         {
           "name": "loyaltyFee",
           "type": "u16"
+        },
+        {
+          "name": "chance",
+          "type": "u16"
         }
       ]
     },
@@ -235,6 +239,10 @@ export type Solbox = {
           {
             "name": "bet",
             "type": "u64"
+          },
+          {
+            "name": "chance",
+            "type": "u16"
           },
           {
             "name": "loyaltyFee",
@@ -391,6 +399,10 @@ export const IDL: Solbox = {
         {
           "name": "loyaltyFee",
           "type": "u16"
+        },
+        {
+          "name": "chance",
+          "type": "u16"
         }
       ]
     },
@@ -552,6 +564,10 @@ export const IDL: Solbox = {
           {
             "name": "bet",
             "type": "u64"
+          },
+          {
+            "name": "chance",
+            "type": "u16"
           },
           {
             "name": "loyaltyFee",
