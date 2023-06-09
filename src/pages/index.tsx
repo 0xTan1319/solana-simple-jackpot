@@ -54,6 +54,7 @@ const Home: NextPage = () => {
   const getBalance = async () => {
     if (wallet?.publicKey) {
       let value = await connection.getBalance(wallet.publicKey);
+      console.log("value", value);
       setBalance(value);
     } else {
       setBalance(0);

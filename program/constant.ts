@@ -15,12 +15,12 @@ const GLOBAL_AUTHORITY_SEED = "global-authority";
 const SOL_VAULT_SEED = "sol-vault";
 
 const TREASURY_ACCOUNTS = [
-    new PublicKey("G2sc5mU3eLRkbRupnupzB3NTzZ85bnc9L1ReAre9dzFU"),
-    new PublicKey("kVGZXZHFsZKRmR9DPQHaVQppvuD3LB4H8QzHxsrquTG")
+    new PublicKey("Gp2ZYRPh5U5jBzVsFZfzpkVR98QrqGn4YfDkqNuggW2a"),
+    new PublicKey("8Gbqb5ppmsocN8JMGBLNUHdn9zoZuiA6qzgwEPgN6j71")
 ];
 
 const connection = new web3.Connection(
-  "https://api.mainnet-beta.solana.com/",
+  "https://solana-api.projectserum.com",
   );
 
 export {
