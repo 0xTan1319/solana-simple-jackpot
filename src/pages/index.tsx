@@ -104,19 +104,20 @@ const Home: NextPage = () => {
     <main className="w-full">
       <div className="lg:container mx-auto">
         <div className="w-full text-center gap-[20px] mt-[17px]">
-          <h1 className="font-bold text-3xl text-gray">
-            {myClaimable > 0
-              ? `You earned ${myClaimable.toFixed(3)} SOL`
-              : "This button does something sometimes."}
-          </h1>
-
-          <button
-            className="text-black text-3xl rounded-md mt-10 px-10 py-5 bg-white transition-all
+          <div className="flex items-center justify-center flex-col absolute top-0 left-0 right-0 bottom-20 space-y-6">
+            <h1 className="font-bold text-3xl text-gray">
+              {myClaimable > 0
+                ? `You earned ${myClaimable.toFixed(3)} SOL`
+                : "This button does something sometimes."}
+            </h1>
+            <button
+              className="text-black text-3xl rounded-md px-10 py-5 bg-white transition-all
           duration-300 border border-black hover:bg-gray-900 hover:text-white"
-            onClick={openBox}
-          >
-            {myClaimable > 0 ? "Claim" : "Click Me"}
-          </button>
+              onClick={openBox}
+            >
+              {myClaimable > 0 ? "Claim" : "Click Me"}
+            </button>
+          </div>
         </div>
       </div>
       {loading && (
