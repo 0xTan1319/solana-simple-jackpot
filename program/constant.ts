@@ -19,7 +19,7 @@ const TREASURY_ACCOUNTS = [
 ];
 
 const connection = new anchor.web3.Connection(
-  anchor.web3.clusterApiUrl("devnet"),
+  anchor.web3.clusterApiUrl("mainnet-beta"),
   "confirmed"
 );
 
