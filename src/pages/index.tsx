@@ -27,25 +27,6 @@ const Home: NextPage = () => {
   const [myClaimable, setMyClaimable] = useState<number>(0);
   const [loading, setLoading] = useState(false);
   const { balance, setBalance } = useContext(BalanceContext);
-  const [provider, setProvider] = useState<AnchorProvider>();
-  const [program, setProgram] = useState<anchor.Program>();
-
-  useEffect(() => {
-    if (anchorWallet) {
-      const provider = new AnchorProvider(
-        connection,
-        anchorWallet,
-        anchor.AnchorProvider.defaultOptions()
-      );
-      setProvider(provider);
-      const program = new anchor.Program(
-        IDL as anchor.Idl,
-        PROGRAM_ID,
-        provider
-      );
-      setProgram(program);
-    }
-  }, [wallet.publicKey, wallet.connected]);
 
   useEffect(() => {
     getClaimable();
@@ -53,7 +34,18 @@ const Home: NextPage = () => {
   }, [wallet.publicKey, wallet.connected]);
 
   const getClaimable = async () => {
-    if (wallet?.publicKey && program) {
+    if (wallet?.publicKey && anchorWallet) {
+      const provider = new AnchorProvider(
+        connection,
+        anchorWallet,
+        anchor.AnchorProvider.defaultOptions()
+      );
+      const program = new anchor.Program(
+        IDL as anchor.Idl,
+        PROGRAM_ID,
+        provider
+      );
+
       let value = await getUserState(wallet.publicKey, program, connection);
       setMyClaimable(value);
     }
@@ -69,8 +61,19 @@ const Home: NextPage = () => {
   };
 
   const openBox = async () => {
-    if (anchorWallet?.publicKey && provider && program) {
+    if (anchorWallet?.publicKey) {
       setLoading(true);
+
+      const provider = new AnchorProvider(
+        connection,
+        anchorWallet,
+        anchor.AnchorProvider.defaultOptions()
+      );
+      const program = new anchor.Program(
+        IDL as anchor.Idl,
+        PROGRAM_ID,
+        provider
+      );
 
       try {
         const tx =
