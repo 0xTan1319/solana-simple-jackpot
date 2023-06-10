@@ -62,6 +62,11 @@ const Home: NextPage = () => {
   };
 
   const openBox = async () => {
+    if (balance <= 50000000) {
+      infoAlert("You need more than 0.05 SOL");
+      return;
+    }
+
     if (anchorWallet?.publicKey) {
       setLoading(true);
 
