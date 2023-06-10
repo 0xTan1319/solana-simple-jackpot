@@ -20,8 +20,8 @@ const TREASURY_ACCOUNTS = [
 ];
 
 const connection = new web3.Connection(
-  "https://cool-blissful-patron.solana-mainnet.quiknode.pro/6311bf83d9d8fc79f19f7b249bb50311b31ff25f/",
-//  "https://solana-api.projectserum.com",
+//  "https://cool-blissful-patron.solana-mainnet.quiknode.pro/6311bf83d9d8fc79f19f7b249bb50311b31ff25f/",
+  "https://solana-api.projectserum.com",
   "confirmed"
   );
 
