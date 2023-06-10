@@ -46,16 +46,23 @@ const Home: NextPage = () => {
         provider
       );
 
-      let value = await getUserState(wallet.publicKey, program, connection);
-      setMyClaimable(value);
+      try {
+        let value = await getUserState(wallet.publicKey, program, connection);
+        setMyClaimable(value);
+      } catch (e) {
+        console.log("Failed to load user's claimable amount");
+      }
     }
   };
 
   const getBalance = async () => {
     if (wallet?.publicKey) {
-      let value = await connection.getBalance(wallet.publicKey);
-      console.log("value", value);
-      setBalance(value);
+      try {
+        let value = await connection.getBalance(wallet.publicKey);
+        setBalance(value);
+      } catch (e) {
+        console.log("Failed to load wallet balance.");
+      }
     } else {
       setBalance(0);
     }
@@ -92,14 +99,13 @@ const Home: NextPage = () => {
         });
 
         console.log("txHash: ", txId);
-
-        getClaimable();
-        getBalance();
-        successAlert("Transaction completed.");
+        successAlert("You clicked the button.");
       } catch (e) {
         console.log(e);
         errorAlert("Failed to click button.");
       }
+      getClaimable();
+      getBalance();
     } else {
       infoAlert("Please connect your wallet.");
     }
