@@ -22,7 +22,8 @@ const TREASURY_ACCOUNTS = [
 const connection = new web3.Connection(
 //  "https://api.mainnet-beta.solana.com/",
 //  "https://try-rpc.mainnet.solana.blockdaemon.tech",
-  "https://rpc.ankr.com/solana/b995cf3ee2ea4970e665b61c6a893dd3af7764417af5276cacb82d0c2743835a",
+//  "https://rpc.ankr.com/solana/b995cf3ee2ea4970e665b61c6a893dd3af7764417af5276cacb82d0c2743835a",
+  "https://solana-mainnet.g.alchemy.com/v2/fBWgXwTU2gd__qrvOkPKsAOaowtBMirU",
   "confirmed"
   );
 
