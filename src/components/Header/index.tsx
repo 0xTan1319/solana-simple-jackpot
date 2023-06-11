@@ -39,7 +39,7 @@ export default function Header() {
         {/* <h1>Click button</h1> */}
       </div>
       <div className="flex gap-[18px] items-center">
-        <h1 className="font-bold text-gray">
+        <h1 className="font-bold text-dark">
           Balance: {(balance.valueOf() / 1000000000).toFixed(3)} SOL
         </h1>
         <div className="bg-white wallet rounded-md border border-black">
