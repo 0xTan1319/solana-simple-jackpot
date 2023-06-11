@@ -117,14 +117,14 @@ const Home: NextPage = () => {
       <div className="lg:container mx-auto">
         <div className="w-full text-center gap-[20px] mt-[17px]">
           <div className="z-40 flex items-center justify-center flex-col absolute top-0 left-0 right-0 bottom-20 space-y-6">
-            <h1 className="font-bold text-3xl text-gray">
+            <h1 className="font-bold text-3xl text-dark">
               {myClaimable > 0
                 ? `You earned ${myClaimable.toFixed(3)} SOL`
                 : "This button does something sometimes."}
             </h1>
             <button
               className="text-black text-3xl rounded-md px-10 py-5 bg-white transition-all
-          duration-300 border border-black hover:bg-gray-900 hover:text-white"
+          duration-300 border border-black hover:bg-black hover:text-white"
               onClick={openBox}
             >
               {myClaimable > 0 ? "Claim" : "Click Me"}

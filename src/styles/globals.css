@@ -97,5 +97,10 @@ a {
 }
 
 .wallet-adapter-button:hover {
- color:white !important
+ color:white !important;
+ background-color: black !important
+}
+
+.wallet-adapter-dropdown-list {
+  background: black !important;
 }
